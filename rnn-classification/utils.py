@@ -9,6 +9,7 @@ import glob
 
 # alphabets small + capital letters + " .,;"
 ALL_Letters = string.ascii_letters  + " .,;"
+N_Letters   = len(ALL_Letters)
 
 # turn a unicode string to a plan ASCII
 def unicode_to_ascii(s):
@@ -38,3 +39,49 @@ def load_data():
         category_lines[category] = lines
         
     return category_lines, all_categorys
+
+
+# Letter & Word to Tensor Conversion
+
+def letter_to_index(letter):
+    # letter-> index
+    return ALL_Letters.find(letter)
+
+def letter_to_tensor(letter):
+    # letter -> one-hot Tensor
+    tensor = torch.zeros(1, N_Letters)
+    tensor[0][letter_to_index(letter)] = 1
+    return tensor
+
+def line_to_tensor(line):
+    # Word -> 3D
+    tensor = torch.zeros(len(line),1,N_Letters)
+    for i, letter in enumerate(line):
+        tensor[i][0][letter_to_index(letter)]=1
+    return tensor
+
+
+def random_training_eg(category_lines, all_categorys):
+    
+    def random_choice(a):
+        random_idx = random.randint(0, len(a) -1)
+        return a[random_idx]
+    
+    category = random_choice(all_categorys)
+    line = random_choice(category_lines[category])
+    
+    category_tensor = torch.tensor([all_categorys.index(category)], dtype=torch.long)
+    line_tensor = line_to_tensor(line)
+    
+    return category, category_tensor, line, line_tensor
+
+if __name__=='__main__':
+    print(ALL_Letters)  
+    
+    print(unicode_to_ascii('Ślusàrski'))
+    
+    category_lines, all_categories = load_data()
+    print(category_lines['Italian'][:5])
+    
+    print(letter_to_tensor('J')) # [1, 57]
+    print(line_to_tensor('Jones').size()) # [5, 1, 57]
