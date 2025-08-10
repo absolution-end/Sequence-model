@@ -13,7 +13,7 @@ N_Letters   = len(ALL_Letters)
 
 # turn a unicode string to a plan ASCII
 def unicode_to_ascii(s):
-    return " ".join(
+    return "".join(
         c for c in unicodedata.normalize('NFD',s)
         if unicodedata.category(c) != 'Mn'
         and c in ALL_Letters
@@ -29,9 +29,9 @@ def load_data():
     
     def read_lines(filename):
         lines = io.open(filename, encoding ='utf-8').read().strip().split('\n')
-        return [unicode_to_ascii(lines) for line in lines ]
+        return [unicode_to_ascii(line) for line in lines ]
     
-    for filename in find_files('data/names/*.txt'):
+    for filename in find_files('G:/Sequence-model/rnn-classification/data/names/*.txt'):
         category = os.path.splitext(os.path.basename(filename))[0]
         all_categorys.append(category)
         
@@ -84,4 +84,4 @@ if __name__=='__main__':
     print(category_lines['Italian'][:5])
     
     print(letter_to_tensor('J')) # [1, 57]
-    print(line_to_tensor('Jones').size()) # [5, 1, 57]
+    print(line_to_tensor('Jones').size()) # [5, 1, 57]  
