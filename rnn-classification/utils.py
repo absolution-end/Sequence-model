@@ -61,16 +61,16 @@ def line_to_tensor(line):
     return tensor
 
 
-def random_training_eg(category_lines, all_categorys):
+def random_training_eg(category_lines, all_categories):
     
     def random_choice(a):
         random_idx = random.randint(0, len(a) -1)
         return a[random_idx]
     
-    category = random_choice(all_categorys)
+    category = random_choice(all_categories)
     line = random_choice(category_lines[category])
     
-    category_tensor = torch.tensor([all_categorys.index(category)], dtype=torch.long)
+    category_tensor = torch.tensor([all_categories.index(category)], dtype=torch.long)
     line_tensor = line_to_tensor(line)
     
     return category, category_tensor, line, line_tensor
